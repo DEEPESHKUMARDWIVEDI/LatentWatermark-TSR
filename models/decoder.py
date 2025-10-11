@@ -1,25 +1,30 @@
+# models/decoder.py
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 class LatentDecoder(nn.Module):
-    """
-    Decoder to recover latent vector from watermarked image
-    """
-    def __init__(self, in_channels=3, latent_dim=128):
-        super(LatentDecoder, self).__init__()
+    def __init__(self, latent_dim=128):
+        super().__init__()
         self.conv = nn.Sequential(
-            nn.Conv2d(in_channels, 64, 3, stride=2, padding=1),
+            nn.Conv2d(3, 32, 4, 2, 1),
             nn.ReLU(),
-            nn.Conv2d(64, 128, 3, stride=2, padding=1),
+            nn.Conv2d(32, 64, 4, 2, 1),
             nn.ReLU(),
-            nn.Conv2d(128, 256, 3, stride=2, padding=1),
-            nn.ReLU()
+            nn.Conv2d(64, 128, 4, 2, 1),
+            nn.ReLU(),
+            nn.Flatten()
         )
-        self.flatten = nn.Flatten()
-        self.fc = nn.Linear(256*4*4, latent_dim)  # assuming 32x32 input
+        self.fc = nn.Linear(8 * 8 * 128, latent_dim)
 
     def forward(self, x):
-        x = self.conv(x)
-        x = self.flatten(x)
-        z_hat = self.fc(x)
-        return z_hat
+        h = self.conv(x)
+        zhat = self.fc(h)
+        return zhat
+
+
+if __name__ == "__main__":
+    m = LatentDecoder(128)
+    x = torch.randn(2, 3, 64, 64)
+    z = m(x)
+    print("z'", z.shape)

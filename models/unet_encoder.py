@@ -1,49 +1,42 @@
+# models/unet_encoder.py
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class UNetBlock(nn.Module):
-    def __init__(self, in_ch, out_ch):
-        super(UNetBlock, self).__init__()
-        self.conv = nn.Sequential(
-            nn.Conv2d(in_ch, out_ch, 3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(out_ch, out_ch, 3, padding=1),
-            nn.ReLU()
-        )
-
-    def forward(self, x):
-        return self.conv(x)
-
-class UNetEncoder(nn.Module):
-    """
-    U-Net based encoder to embed latent vector into image
-    """
-    def __init__(self, in_channels=3, latent_dim=128):
-        super(UNetEncoder, self).__init__()
-        self.enc1 = UNetBlock(in_channels, 64)
-        self.enc2 = UNetBlock(64, 128)
-        self.enc3 = UNetBlock(128, 256)
-
-        self.pool = nn.MaxPool2d(2)
-        self.up2 = nn.ConvTranspose2d(256, 128, 2, stride=2)
-        self.up1 = nn.ConvTranspose2d(128, 64, 2, stride=2)
-
-        self.out_conv = nn.Conv2d(64, in_channels, 1)
-        self.latent_fc = nn.Linear(latent_dim, 256*4*4)  # Assuming 32x32 input
+class SimpleUNet(nn.Module):
+    def __init__(self, latent_dim=128):
+        super().__init__()
+        self.enc1 = nn.Conv2d(3, 32, 3, 1, 1)
+        self.enc2 = nn.Conv2d(32, 64, 3, 2, 1)
+        self.enc3 = nn.Conv2d(64, 128, 3, 2, 1)
+        self.bottleneck_conv = nn.Conv2d(128 + 16, 128, 3, 1, 1)
+        self.dec2 = nn.ConvTranspose2d(128, 64, 4, 2, 1)
+        self.dec1 = nn.ConvTranspose2d(64, 32, 4, 2, 1)
+        self.out_conv = nn.Conv2d(32, 3, 3, 1, 1)
+        self.latent_proj = nn.Linear(latent_dim, 16 * 8)
 
     def forward(self, x, z):
-        # Encode
-        e1 = self.enc1(x)
-        e2 = self.enc2(self.pool(e1))
-        e3 = self.enc3(self.pool(e2))
+        e1 = F.relu(self.enc1(x))
+        e2 = F.relu(self.enc2(e1))
+        e3 = F.relu(self.enc3(e2))
 
-        # Inject latent vector
-        z_proj = self.latent_fc(z).view(-1, 256, 4, 4)
-        e3 = e3 + z_proj  # Broadcast addition
+        lp = self.latent_proj(z)
+        lp = lp.view(-1, 1, 16, 8)
+        lp = F.interpolate(lp, size=(16, 16), mode="bilinear", align_corners=False)
 
-        # Decode
-        d2 = self.up2(e3) + e2
-        d1 = self.up1(d2) + e1
-        out = torch.sigmoid(self.out_conv(d1))
-        return out
+        bottleneck = torch.cat([e3, lp.repeat(1, 16, 1, 1)[:, :128, :, :]], dim=1)
+        b = F.relu(self.bottleneck_conv(bottleneck))
+
+        d2 = F.relu(self.dec2(b))
+        d1 = F.relu(self.dec1(d2))
+        out = torch.tanh(self.out_conv(d1))
+        Iw = torch.clamp(x + 0.05 * out, -1.0, 1.0)
+        return Iw
+
+
+if __name__ == "__main__":
+    m = SimpleUNet(128)
+    x = torch.randn(2, 3, 64, 64)
+    z = torch.randn(2, 128)
+    Iw = m(x, z)
+    print("Iw", Iw.shape)

@@ -1,26 +1,22 @@
+# utils/visualization.py
 import matplotlib.pyplot as plt
 import torch
+import numpy as np
+import os
+from torchvision.utils import make_grid
 
-def show_images(images, titles=None, nrow=4, figsize=(12,8)):
-    """
-    Display batch of images in a grid.
-    Args:
-        images: torch tensor [B,C,H,W]
-        titles: list of titles for each image
-        nrow: number of images per row
-    """
-    images = images.cpu().detach()
-    B, C, H, W = images.shape
-    ncol = int(np.ceil(B / nrow))
-    fig, axes = plt.subplots(nrow, ncol, figsize=figsize)
-    axes = axes.flatten()
-    for i in range(B):
-        img = images[i].permute(1,2,0)  # C,H,W -> H,W,C
-        axes[i].imshow(img)
-        axes[i].axis('off')
-        if titles:
-            axes[i].set_title(titles[i])
-    for i in range(B, len(axes)):
-        axes[i].axis('off')
-    plt.tight_layout()
-    plt.show()
+def show_tensor_image(x, title=None):
+    if x.dim() == 4:
+        x = make_grid(x)
+    img = x.detach().cpu().numpy()
+    img = (np.transpose(img, (1, 2, 0)) + 1.0) / 2.0
+    plt.imshow(img)
+    if title:
+        plt.title(title)
+    plt.axis('off')
+
+def save_sample(img_tensor, path):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    grid = make_grid(img_tensor, nrow=4, normalize=True, scale_each=True)
+    npimg = grid.detach().cpu().numpy()
+    plt.imsave(path, np.transpose(npimg, (1, 2, 0)))
