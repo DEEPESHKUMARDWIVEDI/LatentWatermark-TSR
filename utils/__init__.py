@@ -1,5 +1,5 @@
-from .metrics import psnr, ssim, latent_similarity
-from .visualize import show_images
-from .screen_noise_layer import ScreenNoiseLayer
+from .metrics import psnr, ssim_batch, latent_similarity
+from .visualization import show_tensor_image
 
-__all__ = ['psnr', 'ssim', 'latent_similarity', 'show_images', 'ScreenNoiseLayer']
+
+__all__ = ['psnr', 'ssim_batch', 'latent_similarity', 'show_tensor_image']

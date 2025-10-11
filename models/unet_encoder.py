@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class SimpleUNet(nn.Module):
+class UNetEncoder(nn.Module):
     def __init__(self, latent_dim=128):
         super().__init__()
         self.enc1 = nn.Conv2d(3, 32, 3, 1, 1)

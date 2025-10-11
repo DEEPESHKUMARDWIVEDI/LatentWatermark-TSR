@@ -1,6 +1,7 @@
 # utils/metrics.py
 import torch
 import numpy as np
+import torch.nn.functional as F
 from skimage.metrics import structural_similarity as ssim
 from math import log10
 
@@ -33,3 +34,23 @@ def ssim_batch(x, y):
         a = np.moveaxis(x, 0, -1)
         b = np.moveaxis(y, 0, -1)
         return float(ssim(a, b, multichannel=True))
+
+
+def latent_similarity(z, z_hat, metric='mse'):
+    """
+    Computes similarity between latent vectors.
+    Args:
+        z: original latent vector (tensor)
+        z_hat: recovered latent vector (tensor)
+        metric: 'mse' or 'cosine'
+    Returns:
+        similarity score (float)
+    """
+    if metric == 'mse':
+        return F.mse_loss(z_hat, z, reduction='mean').item()
+    elif metric == 'cosine':
+        z_norm = F.normalize(z, dim=1)
+        z_hat_norm = F.normalize(z_hat, dim=1)
+        return (1 - (z_norm * z_hat_norm).sum(dim=1).mean()).item()
+    else:
+        raise ValueError("metric must be 'mse' or 'cosine'")

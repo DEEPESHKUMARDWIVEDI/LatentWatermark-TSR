@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class SmallSeg(nn.Module):
+class BiSeNetDetector(nn.Module):
     def __init__(self, num_classes=2):
         super().__init__()
         self.backbone = nn.Sequential(
@@ -30,7 +30,7 @@ class SmallSeg(nn.Module):
 
 
 if __name__ == "__main__":
-    net = SmallSeg(2)
+    net = BiSeNetDetector(2)
     x = torch.randn(2, 3, 64, 64)
     logits = net(x)
     print(logits.shape)
