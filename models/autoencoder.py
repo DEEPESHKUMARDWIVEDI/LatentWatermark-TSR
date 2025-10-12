@@ -1,7 +1,8 @@
+# models/autoencoder.py
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import os
 
 # -----------------------------
 # Encoder
@@ -75,8 +76,11 @@ class Autoencoder(nn.Module):
         return z, x_rec
 
 
-
+# -----------------------------
+# Save / Load helpers
+# -----------------------------
 def save_checkpoint(model, optimizer, epoch, filename):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     checkpoint = {
         "epoch": epoch,
         "model_state": model.state_dict(),
@@ -84,19 +88,10 @@ def save_checkpoint(model, optimizer, epoch, filename):
     }
     torch.save(checkpoint, filename)
 
-def load_checkpoint(model, optimizer, filename):
-    checkpoint = torch.load(filename)
-    model.load_state_dict(checkpoint["model_state"])
-    optimizer.load_state_dict(checkpoint["optimizer_state"])
-    print(f"Loaded checkpoint from epoch {checkpoint['epoch']}")
-
-
-
-# -----------------------------
-# Quick Test
-# -----------------------------
-if __name__ == "__main__":
-    model = Autoencoder(latent_dim=128)
-    x = torch.randn(2, 3, 32, 32)
-    z, x_rec = model(x)
-    print(f"Latent z: {z.shape}, Reconstructed x: {x_rec.shape}")
+def load_checkpoint(model, optimizer, filename, map_location=None):
+    ckpt = torch.load(filename, map_location=map_location)
+    model.load_state_dict(ckpt["model_state"])
+    if optimizer is not None and "optimizer_state" in ckpt:
+        optimizer.load_state_dict(ckpt["optimizer_state"])
+    print(f"Loaded checkpoint from epoch {ckpt.get('epoch','?')}")
+    return ckpt
