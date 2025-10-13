@@ -13,7 +13,7 @@ class TSRNet(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
         
         # Fully connected layers
-        self.fc1 = nn.Linear(64 * 8 * 8, 256)
+        self.fc1 = nn.Linear(64 * 16 * 16, 256)
         self.fc2 = nn.Linear(256, num_classes)
 
     def forward(self, x):
@@ -39,7 +39,7 @@ class TSRNet(nn.Module):
 #         self.conv1 = nn.Conv2d(3, 32, 3, 1, 1)
 #         self.conv2 = nn.Conv2d(32, 64, 3, 1, 1)
 #         self.pool = nn.MaxPool2d(2, 2)
-#         self.fc1 = nn.Linear(64 * 16 * 16, 256)
+#         self.fc1 = nn.Linear(64 * 8 * 8, 256)
 #         self.fc2 = nn.Linear(256, num_classes)
 
 #     def forward(self, x):

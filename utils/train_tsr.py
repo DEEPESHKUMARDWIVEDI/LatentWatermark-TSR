@@ -44,7 +44,7 @@ def train_tsr(model, train_loader, test_loader, device, num_epochs=5, lr=0.001, 
                 correct += (predicted == labels).sum().item()
 
         test_acc = 100 * correct / total
-        print(f"Test Accuracy: {test_acc:.2f}%")
+        print(f" Test Accuracy: {test_acc:.2f}%")
         if test_acc > best_acc:
             best_acc = test_acc
             ckpt_path = f"{ckpt_dir}/tsr_epoch{epoch+1}_acc{int(best_acc)}.pth"
@@ -54,7 +54,7 @@ def train_tsr(model, train_loader, test_loader, device, num_epochs=5, lr=0.001, 
                 'optimizer_state_dict': optimizer.state_dict(),
                 'accuracy': best_acc,
             }, ckpt_path)
-            print(f"Saved checkpoint: {ckpt_path}")
+            print(f"✅ Saved checkpoint: {ckpt_path}")
 
     print(f"Training complete. Best accuracy: {best_acc:.2f}%")
     return model, best_acc
