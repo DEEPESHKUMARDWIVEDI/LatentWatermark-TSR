@@ -23,17 +23,25 @@ def ssim_batch(x, y):
     if torch.is_tensor(y):
         y = y.detach().cpu().numpy()
 
-    if x.ndim == 4:
+    def safe_ssim(a, b):
+        # Move channel to last dimension if needed
+        if a.shape[0] in [1, 3]:  # C,H,W -> H,W,C
+            a = np.moveaxis(a, 0, -1)
+            b = np.moveaxis(b, 0, -1)
+        # compute win_size: must be odd and <= min(H,W)
+        win_size = min(a.shape[0], a.shape[1], 7)
+        if win_size % 2 == 0:
+            win_size -= 1
+        return ssim(a, b, channel_axis=-1, win_size=win_size)
+
+    if x.ndim == 4:  # batch of images
         res = []
         for i in range(x.shape[0]):
-            a = np.moveaxis(x[i], 0, -1)
-            b = np.moveaxis(y[i], 0, -1)
-            res.append(ssim(a, b, multichannel=True))
+            res.append(safe_ssim(x[i], y[i]))
         return float(np.mean(res))
     else:
-        a = np.moveaxis(x, 0, -1)
-        b = np.moveaxis(y, 0, -1)
-        return float(ssim(a, b, multichannel=True))
+        return float(safe_ssim(x, y))
+
 
 
 def latent_similarity(z, z_hat, metric='mse'):
