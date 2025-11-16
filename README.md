@@ -22,7 +22,15 @@ This project implements a **latent-space watermarking framework** for traffic si
 
 ## Dataset
 We use the **GTSRB (German Traffic Sign Recognition Benchmark)** dataset.  
-It is publicly available and contains over 50,000 labeled images across 43 sign classes.(https://www.kaggle.com/datasets/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign)
+It is publicly available and contains over 50,000 labeled images across 43 sign classes.(https://www.kaggle.com/datasets/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign). Dowload and extract. Directory structure will look like this    
+```bash
+      data/
+      ├── meta/
+      ├── train/ 
+      ├── test/
+      ├── Meta.csv
+      ├── Train.csv
+      └── Test.csv
 
 ---
 
@@ -48,16 +56,10 @@ It is publicly available and contains over 50,000 labeled images across 43 sign 
    ```bash
    jupyter notebook LatentWatermark_TSR.ipynb
 
-
----
+5. Dependencies can also be installed by:
    ```bash
+   pip install -r requirements.txt
 
-      data/
-      ├── meta/
-      ├── train/ 
-      ├── test/
-      ├── Meta.csv
-      ├── Train.csv
-      └── Test.csv
 
 ---
+
