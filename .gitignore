@@ -18,7 +18,7 @@
 # Ignore data folder (large datasets)
 # -----------------------------
 data/*
-!data/.gitkeep
+!data/README.md
 # -----------------------------
 # Ignore results/checkpoints (model weights, training outputs)
 # -----------------------------
