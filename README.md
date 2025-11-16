@@ -14,7 +14,7 @@ This project implements a **latent-space watermarking framework** for traffic si
 ---
 
 ## Architecture
-![Architecture](output1.png) 
+![Architecture](SignGuard.drawio.png) 
 
 *Figure:Latent watermarking pipeline for traffic sign images.* The autoencoder extracts the latent representations of the traffic sign images. The U-Net watermarking module embeds these latent representations into the traffic sign images imperceptibly. A noise layer simulation ensures robustness against both digital and physical level perturbations. Finally, the latent extractor recovers the embedded latent representations from the distorted traffic sign images, which are reconstructed by the autoencoder back to the traffic sign image, which is used by the TSR system for accurate recognition.
 
@@ -39,6 +39,7 @@ It is publicly available and contains over 50,000 labeled images across 43 sign 
 3. Open the notebook
 
    jupyter notebook LatentWatermark_TSR.ipynb
+   ---
 
 data/
 ├── meta/
