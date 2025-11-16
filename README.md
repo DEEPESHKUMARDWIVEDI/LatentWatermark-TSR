@@ -32,7 +32,8 @@ It is publicly available and contains over 50,000 labeled images across 43 sign 
       ├── Meta.csv
       ├── Train.csv
       └── Test.csv
-      
+
+   ```bash 
 ---
 
 ##  How to Run
