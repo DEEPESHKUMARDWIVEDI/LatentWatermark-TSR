@@ -26,7 +26,7 @@ It is publicly available and contains over 50,000 labeled images across 43 sign 
 
 
    ```
-   
+
    data/
       ├── meta/
       ├── train/ 
@@ -39,28 +39,28 @@ It is publicly available and contains over 50,000 labeled images across 43 sign 
 
 ##  How to Run
 1. Clone the repository  
-   ```bash
+   ```
    git clone https://github.com/DEEPESHKUMARDWIVEDI/LatentWatermark-TSR.git
    cd LatentWatermark-TSR
 
 2. Create a Conda environment from the YAML file
-   ```bash
+   ```
    conda env create -f environment.yml
 
 3. Activate the environment
-   ```bash
+   ```
    conda activate latenttsr_tsr
 
 4. Set the Jupyter kernel to use this environment
-   ```bash
+   ```
    python -m ipykernel install --user --name=latenttsr_tsr
 
 5. Open the notebook
-   ```bash
+   ```
    jupyter notebook LatentWatermark_TSR.ipynb
 
 5. Dependencies can also be installed by:
-   ```bash
+   ```
    pip install -r requirements.txt
 
 
