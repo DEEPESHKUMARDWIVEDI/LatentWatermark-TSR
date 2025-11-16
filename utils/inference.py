@@ -17,8 +17,8 @@ from utils.metrics import psnr, ssim_batch, lpips_batch
 
 @torch.no_grad()
 def evaluate_unet_watermark(test_loader, device,
-                            unet_ckpt="results/checkpoints/unet/unet_epoch43.pth",
-                            latent_decoder_ckpt="results/checkpoints/unet/latent_decoder_epoch43.pth",
+                            unet_ckpt="results/checkpoints/unet/unet_best.pth",
+                            latent_decoder_ckpt="results/checkpoints/unet/latent_decoder_best.pth",
                             autoencoder_ckpt="results/checkpoints/autoencoder/autoencoder_best.pth",
                             tsr_ckpt="results/checkpoints/tsr/tsr_best_model.pth",
                             latent_dim=512,
@@ -65,8 +65,6 @@ def evaluate_unet_watermark(test_loader, device,
         correct_orig += (preds_orig == labels).sum().item()
 
         z = ae.encoder(imgs)
-        # z = torch.randn(imgs.size(0), latent_dim, device=imgs.device)
-
 
         Iw = unet(imgs, z)
 
@@ -79,7 +77,7 @@ def evaluate_unet_watermark(test_loader, device,
         _, preds_dist = torch.max(outputs_dist, 1)
         correct_dist += (preds_dist == labels).sum().item()
 
-        z_pred = latent_decoder(Iw)
+        z_pred = latent_decoder(Iw_shot)
         recon = ae.decoder(z_pred)
         recon = torch.clamp(recon, -1, 1)
 
@@ -131,11 +129,10 @@ def evaluate_unet_watermark(test_loader, device,
     imgs = imgs.to(device)[:8]
 
     z = ae.encoder(imgs)
-    # z = torch.randn(imgs.size(0), latent_dim, device=imgs.device)
 
     Iw = unet(imgs, z)
     Iw_shot = screen(Iw)
-    z_pred = latent_decoder(Iw)
+    z_pred = latent_decoder(Iw_shot)
     recon = ae.decoder(z_pred)
 
     imgs_vis = (imgs + 1) / 2
