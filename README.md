@@ -1,46 +1,28 @@
 # Latent Watermark for Traffic Sign Recognition (TSR)
 
 ## Project Overview
-This project builds upon **StegaStamp** to develop a **latent-space watermarking defense** for Traffic Sign Recognition (TSR) systems.  
-Unlike traditional image-level watermarking, our approach embeds watermarks in the **semantic latent vector space** of the sign image.  
-This makes the watermark **robust against adversarial attacks, screen-shooting distortions**, and **image transformations** such as perspective, illumination, and Moiré distortions.
+This project implements a **latent-space watermarking framework** for traffic sign recognition (TSR) systems. Unlike traditional watermarking, our method embeds the **latent representation** of a traffic sign directly into the image, ensuring the watermark is **imperceptible**, **robust to digital and physical distortions**, and **preserves classification performance**.
 
 ---
 
-## Objectives
-- Implement a **latent-space watermark encoder-decoder** pipeline.  
-- Simulate **screen-shooting noise layers** (Perspective, Illumination, Moiré distortions).  
-- Evaluate watermark robustness under **FGSM/PGD attacks** and distortions.  
-- Integrate watermarking defense in a **TSR model** trained on the GTSRB dataset.
+## Key features:
+- **Latent-space embedding:** Protects images without altering pixel-level information.  
+- **Physical-world robustness:** Handles noise, blur, color jitter, and perspective changes.  
+- **End-to-end recovery:** Recovers the latent vector and reconstructs the image, ensuring watermark reliability.  
+- **Plug-and-play:** Compatible with any TSR model without retraining.
 
 ---
 
 ## Architecture
-Our model consists of:
-1. **Encoder (U-Net-based)** – embeds watermark into the latent space.  
-2. **Noise Layer** – applies distortions such as perspective, illumination, and moiré.  
-3. **Decoder** – reconstructs and verifies the latent watermark.  
-4. **TSR Classifier** – trained to classify traffic signs while maintaining watermark integrity.
+![Architecture](output1.png) 
 
-Total loss:
-\[
-\mathcal{L}_{total} = \lambda_1 \mathcal{L}_{recon} + \lambda_2 \mathcal{L}_{latent} + \lambda_3 \mathcal{L}_{detect} + \lambda_4 \mathcal{L}_{robust}
-\]
+*Figure:Latent watermarking pipeline for traffic sign images.* The autoencoder extracts the latent representations of the traffic sign images. The U-Net watermarking module embeds these latent representations into the traffic sign images imperceptibly. A noise layer simulation ensures robustness against both digital and physical level perturbations. Finally, the latent extractor recovers the embedded latent representations from the distorted traffic sign images, which are reconstructed by the autoencoder back to the traffic sign image, which is used by the TSR system for accurate recognition.
 
 ---
 
 ## Dataset
 We use the **GTSRB (German Traffic Sign Recognition Benchmark)** dataset.  
-It is publicly available and contains over 50,000 labeled images across 43 sign classes.
-
----
-
-## Current Progress (Phase-II)
--  Dataset preprocessed and loaded into training pipeline  
--  U-Net Encoder and Decoder implemented  
--  Screen noise distortion layer integrated  
--  Initial training and watermark embedding verified  
--  Next: Evaluate adversarial robustness and TSR accuracy impact  
+It is publicly available and contains over 50,000 labeled images across 43 sign classes.(https://www.kaggle.com/datasets/meowmeowmeowmeowmeow/gtsrb-german-traffic-sign)
 
 ---
 
@@ -58,3 +40,14 @@ It is publicly available and contains over 50,000 labeled images across 43 sign 
 
    jupyter notebook LatentWatermark_TSR.ipynb
 
+data/----meta
+|
+|-------train
+|
+|-------test
+|
+|-------meta.csv
+|
+|-------train.csv
+|
+|-------test.csv
