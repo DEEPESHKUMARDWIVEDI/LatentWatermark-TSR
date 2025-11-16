@@ -49,10 +49,8 @@ It is publicly available and contains over 50,000 labeled images across 43 sign 
    jupyter notebook LatentWatermark_TSR.ipynb
 
 
-   ---
+---
 
-[[[
-   
 data/
 ├── meta/
 ├── train/ 
@@ -61,4 +59,15 @@ data/
 ├── Train.csv
 └── Test.csv
 
-]]]
+data/
+├── train/
+│ ├── class_0/
+│ ├── class_1/
+│ └── ...
+├── test/
+│ ├── class_0/
+│ ├── class_1/
+│ └── ...
+├── meta.csv
+├── train.csv
+└── test.csv
