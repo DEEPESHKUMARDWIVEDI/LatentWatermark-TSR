@@ -1,55 +1,31 @@
-# -----------------------------
-# Ignore everything by default
-# -----------------------------
-*
 
-# -----------------------------
-# Allow only these file types
-# -----------------------------
+*
 !*.py
 !*.ipynb
 !*.yml
 !*.md
 
-# Allow directories so Git can track allowed files
 !*/
 
-# -----------------------------
-# Ignore data folder (large datasets)
-# -----------------------------
 data/*
 !data/README.md
-# -----------------------------
-# Ignore results/checkpoints (model weights, training outputs)
-# -----------------------------
+
 results/checkpoints/
 results/watermarked/
 results/eval_samples/
 results/samples/
 
-# -----------------------------
-# Python cache files
-# -----------------------------
 __pycache__/
 *.py[cod]
 *$py.class
 
-# -----------------------------
-# Virtual environments
-# -----------------------------
 venv/
 env/
 .env/
 .venv/
 conda_env/
 
-# -----------------------------
-# Jupyter Notebook checkpoints
-# -----------------------------
 .ipynb_checkpoints/
 
-# -----------------------------
-# System files
-# -----------------------------
 .DS_Store
 Thumbs.db
