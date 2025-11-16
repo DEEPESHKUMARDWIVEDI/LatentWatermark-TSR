@@ -33,41 +33,31 @@ It is publicly available and contains over 50,000 labeled images across 43 sign 
    cd LatentWatermark-TSR
 
 2. Create a Conda environment from the YAML file
-
+   ```bash
    conda env create -f environment.yml
 
 3. Activate the environment
-
+   ```bash
    conda activate latenttsr_tsr
 
 4. Set the Jupyter kernel to use this environment
-
+   ```bash
    python -m ipykernel install --user --name=latenttsr_tsr
 
 5. Open the notebook
-
+   ```bash
    jupyter notebook LatentWatermark_TSR.ipynb
 
 
 ---
+   ```bash
 
-data/
-├── meta/
-├── train/ 
-├── test/
-├── Meta.csv
-├── Train.csv
-└── Test.csv
+      data/
+      ├── meta/
+      ├── train/ 
+      ├── test/
+      ├── Meta.csv
+      ├── Train.csv
+      └── Test.csv
 
-data/
-├── train/
-│ ├── class_0/
-│ ├── class_1/
-│ └── ...
-├── test/
-│ ├── class_0/
-│ ├── class_1/
-│ └── ...
-├── meta.csv
-├── train.csv
-└── test.csv
+---
