@@ -72,7 +72,7 @@ class GTSRBDataset(Dataset):
     def __getitem__(self, idx):
         img_path = os.path.join(self.root_dir, self.data.iloc[idx, -1])
         image = Image.open(img_path).convert('RGB')
-        label = int(self.data.iloc[idx, 6])  # ClassId column
+        label = int(self.data.iloc[idx, 6])  
         if self.transform:
             image = self.transform(image)
         return image, label

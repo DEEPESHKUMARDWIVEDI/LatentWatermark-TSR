@@ -60,12 +60,12 @@ def train_tsr(model, train_loader, test_loader, device, num_epochs=20, lr=0.001,
                 "optimizer_state_dict": optimizer.state_dict(),
                 "accuracy": best_acc,
             }, best_path)
-            print(f"✅ Saved best model: {best_path}")
+            print(f"Saved best model: {best_path}")
         else:
             patience_counter += 1
 
         if patience_counter >= patience:
-            print("⏹️ Early stopping triggered.")
+            print("Early stopping triggered.")
             break
 
     print(f"Training complete. Best Test Accuracy: {best_acc:.2f}%")
